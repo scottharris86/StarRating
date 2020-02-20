@@ -33,7 +33,6 @@
                         <subviews>
                             <view verifyAmbiguity="ignoreSizes" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i1e-XB-vJU" customClass="StarRatingControl" customModule="StarRating" customModuleProvider="target">
                                 <rect key="frame" x="87" y="366" width="240" height="128"/>
-                                <color key="backgroundColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <action selector="updateRating:" destination="BYZ-38-t0r" eventType="valueChanged" id="b2Z-uq-U8K"/>
                                 </connections>
