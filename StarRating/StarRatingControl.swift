@@ -17,7 +17,7 @@ class StarRatingControl: UIControl {
     var value: Int = 1
     private let componentDimension: CGFloat = 40.0
     private let componentCount = 5
-    private let componentActiveColor: UIColor = .black
+    private let componentActiveColor: UIColor = .red
     private let componentInactiveColor: UIColor = .gray
     private var stars: [UILabel] = []
     
@@ -124,9 +124,10 @@ extension UIView {
     func performFlare() {
         func flare()   { transform = CGAffineTransform(scaleX: 1.6, y: 1.6) }
         func unflare() { transform = .identity }
+        func spin() { transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2) }
         
         UIView.animate(withDuration: 0.3,
-                       animations: { flare() },
+                       animations: { flare(); spin() },
                        completion: { _ in UIView.animate(withDuration: 0.1) { unflare() }})
     }
 }
