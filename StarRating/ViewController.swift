@@ -15,6 +15,10 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
-
+    @IBAction func updateRating(_ ratingControl: StarRatingControl) {
+        let rating = ratingControl.value
+        title = "User Rating: \(rating) stars"
+    }
+    
 }
 
