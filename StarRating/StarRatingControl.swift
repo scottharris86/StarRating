@@ -19,6 +19,7 @@ class StarRatingControl: UIControl {
     private let componentCount = 5
     private let componentActiveColor: UIColor = .black
     private let componentInactiveColor: UIColor = .gray
+    private var stars: [UILabel] = []
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -50,6 +51,8 @@ class StarRatingControl: UIControl {
             stars.append(label)
             addSubview(label)
         }
+        
+        self.stars = stars
     }
     
     override var intrinsicContentSize: CGSize {
@@ -59,4 +62,71 @@ class StarRatingControl: UIControl {
         return CGSize(width: width, height: componentDimension)
     }
     
+    override func beginTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        updateValue(at: touch)
+        return true
+    }
+    
+    override func continueTracking(_ touch: UITouch, with event: UIEvent?) -> Bool {
+        let touchPoint = touch.location(in: self)
+        if bounds.contains(touchPoint) {
+            sendActions(for: [.touchDragInside])
+            updateValue(at: touch)
+        } else {
+            sendActions(for: [.touchDragOutside])
+        }
+        return true
+    }
+    
+    override func endTracking(_ touch: UITouch?, with event: UIEvent?) {
+        guard let touch = touch else { return }
+        let touchPoint = touch.location(in: self)
+        if bounds.contains(touchPoint) {
+            sendActions(for: [.touchUpInside])
+            updateValue(at: touch)
+        } else {
+            sendActions(for: [.touchUpOutside])
+        }
+        
+    }
+    
+    override func cancelTracking(with event: UIEvent?) {
+        sendActions(for: [.touchCancel])
+    }
+    
+    private func updateValue(at touch: UITouch) {
+        
+        for label in stars {
+            let touchPoint = touch.location(in: label)
+            if label.bounds.contains(touchPoint) {
+                value = label.tag
+                sendActions(for: [.valueChanged])
+                label.textColor = componentActiveColor
+                label.performFlare()
+                for i in 1...label.tag {
+                    let label = stars.filter { $0.tag == i }.first
+                    if let label = label {
+                        label.textColor = componentActiveColor
+                    }
+                    
+                }
+            } else {
+                label.textColor = componentInactiveColor
+            }
+            
+        }
+    }
+    
+}
+
+extension UIView {
+    // "Flare view" animation sequence
+    func performFlare() {
+        func flare()   { transform = CGAffineTransform(scaleX: 1.6, y: 1.6) }
+        func unflare() { transform = .identity }
+        
+        UIView.animate(withDuration: 0.3,
+                       animations: { flare() },
+                       completion: { _ in UIView.animate(withDuration: 0.1) { unflare() }})
+    }
 }
